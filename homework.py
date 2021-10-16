@@ -68,4 +68,4 @@ class CashCalculator(Calculator):
                 f'Денег нет, держись: твой долг '
                 f'- {abs(today_cash_remained):.2f} {currency_tmp}')
         return (f'На сегодня осталось {today_cash_remained:.2f}'
-                    f' {currency_tmp}')
+                f' {currency_tmp}')
