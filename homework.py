@@ -14,9 +14,10 @@ class Calculator:
                     if record.date == dt.date.today()])
 
     def get_week_stats(self):
+        today = dt.date.today()
         week = dt.date.today() - dt.timedelta(days=7)
         return sum([record.amount for record in self.records
-                    if (week < record.date <= dt.date.today())])
+                    if (week < record.date <= today)])
 
 
 class Record:
@@ -66,6 +67,5 @@ class CashCalculator(Calculator):
             return (
                 f'Денег нет, держись: твой долг '
                 f'- {abs(today_cash_remained):.2f} {currency_tmp}')
-        else:
-            return (f'На сегодня осталось {today_cash_remained:.2f}'
+        return (f'На сегодня осталось {today_cash_remained:.2f}'
                     f' {currency_tmp}')
