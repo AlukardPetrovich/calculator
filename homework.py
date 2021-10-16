@@ -14,13 +14,9 @@ class Calculator:
                     if record.date == dt.date.today()])
 
     def get_week_stats(self):
-        week_stats = 0
-        today = dt.date.today()
-        week = today - dt.timedelta(days=7)
-        for record in self.records:
-            if week < record.date <= today:
-                week_stats += record.amount
-        return week_stats
+        week = dt.date.today() - dt.timedelta(days=7)
+        return sum([record.amount for record in self.records
+                    if (week < record.date <= dt.date.today())])
 
 
 class Record:
@@ -60,15 +56,16 @@ class CashCalculator(Calculator):
             'rub': ('руб', self.RUB_RATE),
             'eur': ('Euro', self.EURO_RATE)}
         today_cash_remained = self.limit - self.get_today_stats()
-        if currency not in currencies.keys():
-            return 'запрошен рассчет в неизвестной валюте'
         if today_cash_remained == 0:
             return 'Денег нет, держись'
-        today_cash_remained /= currencies[currency][1]
+        if currency not in currencies:
+            return 'запрошен рассчет в неизвестной валюте'
+        currency_tmp, rate = currencies[currency]
+        today_cash_remained /= rate
         if today_cash_remained < 0:
             return (
                 f'Денег нет, держись: твой долг '
-                f'- {abs(today_cash_remained):.2f} {currencies[currency][0]}')
+                f'- {abs(today_cash_remained):.2f} {currency_tmp}')
         else:
             return (f'На сегодня осталось {today_cash_remained:.2f}'
-                    f' {currencies[currency][0]}')
+                    f' {currency_tmp}')
