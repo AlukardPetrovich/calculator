@@ -10,13 +10,8 @@ class Calculator:
         self.records.append(record)
 
     def get_today_stats(self):
-        today_stats = sum(record.amount for record in self.records
-                          if record.date == dt.date.today())
-
-        for record in self.records:
-            if record.date == dt.date.today():
-                today_stats += record.amount
-        return today_stats
+        return sum([record.amount for record in self.records
+                    if record.date == dt.date.today()])
 
     def get_week_stats(self):
         week_stats = 0
@@ -40,12 +35,10 @@ class Record:
             self.date = dt.datetime.strptime(date, self.format).date()
 
     def __str__(self):
-        return f'{self.amount} {self.comment} {self.date}'
+        return f'{self.amount}, {self.comment}, {self.date}'
 
 
 class CaloriesCalculator(Calculator):
-    def __init__(self, limit):
-        self.limit = limit
 
     def get_calories_remained(self):
         calories_remained = self.limit - self.get_today_stats()
@@ -57,8 +50,6 @@ class CaloriesCalculator(Calculator):
 
 
 class CashCalculator(Calculator):
-    def __init__(self, limit):
-        self.limit = limit
     RUB_RATE = 1
     USD_RATE = 72.3
     EURO_RATE = 83.3
@@ -69,7 +60,7 @@ class CashCalculator(Calculator):
             'rub': ('руб', self.RUB_RATE),
             'eur': ('Euro', self.EURO_RATE)}
         today_cash_remained = self.limit - self.get_today_stats()
-        if currency not in currencies.keys:
+        if currency not in currencies.keys():
             return 'запрошен рассчет в неизвестной валюте'
         if today_cash_remained == 0:
             return 'Денег нет, держись'
